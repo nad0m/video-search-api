@@ -12,11 +12,10 @@ app.set('trust proxy', 1)
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(bodyParser.json())
 
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
+const corsOptions = {
+  origin: '*',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
 
 app.options('*', cors())
  
@@ -24,7 +23,7 @@ app.get('/', cors(), (req, res, next) => {
   res.send("home")
 })
 
-app.post('/log', cors(), (req, res) => {
+app.post('/log', cors(corsOptions), (req, res) => {
   logTraffic(req.body)
 })
 
