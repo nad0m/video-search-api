@@ -1,7 +1,13 @@
 const fetch = require('node-fetch');
 
-const wakeUpDyno = (url, interval = 25, callback) => {
-    const milliseconds = interval * 60000;
+const wakeUpDyno = (url, interval = 1, callback) => {
+    const milliseconds = interval * 10000;
+    const date = new Date()
+
+    if (date.getHours() >= 12 && date.getHours() < 16) {
+        return;
+    }
+
     setTimeout(() => {
 
         try { 

@@ -1,29 +1,15 @@
-const axios = require('axios');
+const fetch = require('node-fetch');
 const KEY = process.env.KEY;
 const BASE_URL = process.env.BASE_URL;
 
-const youtube = axios.create({
-    baseURL: BASE_URL,
-    params: {
-        part: 'snippet',
-        maxResults: 10,
-        key: KEY
-    }
-});
 
-module.exports = getData = async (term) => {
-    let data = null;
-    try {
-      data = await youtube.get('/search', {
-        params: {
-          part: 'snippet',
-          maxResults: 10,
-          key: KEY,
-          ...term
-        }
-      });
-    } catch(e) {
-      console.log(e)
-    }
-    return data
+module.exports = getData = (term, res) => {
+  const url = new URL(BASE_URL)
+  url.searchParams.append('part', 'snippet')
+  url.searchParams.append('maxResults', 10)
+  url.searchParams.append('key', KEY)
+  url.searchParams.append('q', term.q)
+
+  fetch(url.href).then(response => response.json()).then(json => res.send(json)).catch(e => console.log(e))
 }
+
